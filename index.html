@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>South Africa Weather</title>
+  <style>
+    body {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+      background-color: skyblue; 
+      font-family: Arial, sans-serif;
+    }
+    .container {
+      text-align: center;
+      padding: 20px;
+      border-radius: 10px;
+      background-color: white;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+    h1 {
+      margin-top: 0;
+    }
+    input[type="text"] {
+      padding: 8px;
+      margin-bottom: 10px;
+    }
+    button {
+      padding: 8px 20px;
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #45a049;
+    }
+    .weather-icon {
+      width: 50px;
+      height: auto;
+    }
+    #krugersdorpInfo {
+      display: block;
+      margin-bottom: 10px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>South Africa Weather</h1>
+    <div id="krugersdorpInfo">
+      <p>Currently in Krugersdorp: ☀️ 32°C</p> 
+    </div>
+    <input type="text" id="cityInput" placeholder="Enter city name">
+    <button onclick="getWeather()">Search</button>
+    <div id="weatherInfo"></div>
+    <p id="date"></p>
+    <p>Project coded by Elizabeth Eunice Ndzukule</p>
+    <p>This project is open source on <a href="https://github.com/eungobs/weathe-js.git">GitHub</a></p>
+    <p>Hosted on <a href="https://www.netlify.com/">Netlify</a></p>
+
+    <script>
+      function getWeather() {
+        const city = document.getElementById('cityInput').value;
+        const apiKey = '3ed565296c19775878a64c31457d90b2'; 
+        const url = `https://api.openweathermap.org/data/2.5/weather?q=${city},ZA&appid=${apiKey}&units=metric`;
+
+        fetch(url)
+          .then(response => {
+            if (!response.ok) {
+              throw new Error('City not found');
+            }
+            return response.json();
+          })
+          .then(data => {
+            const weatherInfo = document.getElementById('weatherInfo');
+            const celsius = Math.round(data.main.temp);
+            const fahrenheit = Math.round(celsius * 9/5 + 32);
+            const iconCode = data.weather[0].icon;
+            const iconUrl = `https://openweathermap.org/img/w/${iconCode}.png`;
+            weatherInfo.innerHTML = `
+              <h2>${data.name}</h2>
+              <img class="weather-icon" src="${iconUrl}" alt="Weather Icon">
+              <p>☀️ Temperature: ${celsius}°C / ${fahrenheit}°F</p>
+              <p>Weather: ${data.weather[0].description}</p>
+              <p>Humidity: ${data.main.humidity}%</p>
+            `;
+            document.getElementById('krugersdorpInfo').style.display = 'none'; 
+          })
+          .catch(error => {
+            const weatherInfo = document.getElementById('weatherInfo');
+            weatherInfo.innerHTML = `<p>${error.message}</p>`;
+          });
+
+        const currentDate = new Date().toLocaleDateString('en-ZA', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+        document.getElementById('date').textContent = `Today's Date: ${currentDate}`;
+      }
+    </script>
+  </div>
+</body>
+</html>
