@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>South Africa Weather</title>
+  <title>World Weather</title>
   <style>
     body {
       display: flex;
@@ -50,9 +50,9 @@
 </head>
 <body>
   <div class="container">
-    <h1>South Africa Weather</h1>
-    <div id="krugersdorpInfo">
-      <p>Currently in Krugersdorp: ☀️ 32°C</p> 
+    <h1>World Weather</h1>
+    <div id="cityInfo">
+      <p>Currently: ☀️ 32°C</p> 
     </div>
     <input type="text" id="cityInput" placeholder="Enter city name">
     <button onclick="getWeather()">Search</button>
@@ -66,7 +66,7 @@
       function getWeather() {
         const city = document.getElementById('cityInput').value;
         const apiKey = '3ed565296c19775878a64c31457d90b2'; 
-        const url = `https://api.openweathermap.org/data/2.5/weather?q=${city},ZA&appid=${apiKey}&units=metric`;
+        const url = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=metric`;
 
         fetch(url)
           .then(response => {
@@ -88,7 +88,7 @@
               <p>Weather: ${data.weather[0].description}</p>
               <p>Humidity: ${data.main.humidity}%</p>
             `;
-            document.getElementById('krugersdorpInfo').style.display = 'none'; 
+            document.getElementById('cityInfo').style.display = 'none'; 
           })
           .catch(error => {
             const weatherInfo = document.getElementById('weatherInfo');
@@ -102,3 +102,4 @@
   </div>
 </body>
 </html>
+ 
